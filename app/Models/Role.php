@@ -11,6 +11,10 @@ class Role extends Model
 
     protected $fillable = ['name'];
 
+    protected $casts = [
+        'created_at' => 'datetime:d-M-Y'
+    ];
+
     public function users() {
         return $this->belongsToMany(User::class);
     }
