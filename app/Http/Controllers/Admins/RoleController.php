@@ -25,9 +25,8 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create() {
+        return Inertia::render('Admin/Roles/Create');
     }
 
     /**
@@ -36,9 +35,12 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        $request->validate([
+            'name' => 'required',
+        ]);
+        Role::create($request->only(['name']));
+        return redirect(route('admin.roles.index'))->withSuccess('Role created successfully!');
     }
 
     /**

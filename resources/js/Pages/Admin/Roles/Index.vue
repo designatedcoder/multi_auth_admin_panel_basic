@@ -5,9 +5,13 @@
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     Roles
                 </h2>
-                <blue-button href="#" class="text-sm">Create</blue-button>
+                <blue-button :href="route('admin.roles.create')" class="text-sm">Create</blue-button>
             </div>
         </template>
+
+        <div class="text-center my-4" v-if="$page.props.success">
+            <span class="text-2xl bg-blue-500 text-gray-50 px-2 rounded-md">{{ $page.props.success }}</span>
+        </div>
 
         <div class="px-6 py-2">
             <table class="table-auto w-full">
