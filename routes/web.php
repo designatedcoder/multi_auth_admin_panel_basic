@@ -37,5 +37,8 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'verified'])->name('admin.')
         Route::get('/', [RoleController::class, 'index'])->name('index');
         Route::post('/', [RoleController::class, 'store'])->name('store');
         Route::get('/create', [RoleController::class, 'create'])->name('create');
+        Route::get('/{role}', [RoleController::class, 'show'])->name('show');
+        Route::patch('/{role}', [RoleController::class, 'update'])->name('update');
+        Route::delete('/{role}', [RoleController::class, 'destroy'])->name('destroy');
     });
 });

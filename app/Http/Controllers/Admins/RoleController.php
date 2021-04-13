@@ -49,9 +49,10 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
-    {
-        //
+    public function show(Role $role) {
+        return Inertia::render('Admin/Roles/Show', [
+            'role' => $role,
+        ]);
     }
 
     /**
@@ -72,9 +73,12 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
-    {
-        //
+    public function update(Request $request, Role $role) {
+        $request->validate([
+            'name' => 'required',
+        ]);
+        $role->update($request->only(['name']));
+        return redirect(route('admin.roles.index'))->withSuccess('Role updated successfully!');
     }
 
     /**
@@ -83,8 +87,8 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
-    {
-        //
+    public function destroy(Role $role) {
+        $role->delete();
+        return redirect(route('admin.roles.index'))->withSuccess('Role deleted successfully!');
     }
 }

@@ -28,8 +28,8 @@
                         <td class="text-left py-3 pl-3">{{ role.created_at }}</td>
                         <td class="py-3">
                             <div class="flex justify-end pr-3">
-                                <green-button href="#" class="text-sm">Edit</green-button>
-                                <form>
+                                <green-button :href="(route('admin.roles.show', role.id))" class="text-sm">Edit</green-button>
+                                <form @submit.prevent="submit(role.id)">
                                     <jet-danger-button type="submit" class="text-sm ml-1">Delete</jet-danger-button>
                                 </form>
                             </div>
@@ -53,6 +53,11 @@
             BlueButton,
             GreenButton,
             JetDangerButton,
+        },
+        methods: {
+            submit(id) {
+                this.$inertia.delete(this.route('admin.roles.destroy', id))
+            }
         }
     }
 </script>

@@ -10,7 +10,7 @@
 
         <div class="flex flex-col mx-auto px-6 py-2 w-1/2">
             <div>
-                <h2 class="text-center text-xl font-semibold capitalize underline">{{ form.name }}</h2>
+                <h2 class="text-center text-xl font-semibold capitalize underline">{{ role.name }}</h2>
                 <form @submit.prevent="submit">
                     <div class="mt-4">
                         <jet-label for="name" value="Role Name" class="text-xl"></jet-label>
@@ -18,7 +18,7 @@
                         <jet-input-error :message="form.errors.name" class="mt-2"></jet-input-error>
                     </div>
                     <div class="flex items-center justify-center mt-4">
-                        <green-button type="submit" class="text-sm" :class="{'opacity-25':form.processing}" :disabled="form.processing">Submit</green-button>
+                        <green-button type="submit" class="text-sm" :class="{'opacity-25':form.processing}" :disabled="form.processing">Update</green-button>
                         <jet-danger-button :href="route('admin.roles.index')" class="text-sm ml-4">Cancel</jet-danger-button>
                     </div>
                 </form>
@@ -36,6 +36,7 @@
     import JetInputError from '@/Jetstream/InputError'
     import JetLabel from '@/Jetstream/Label'
     export default {
+        props: ['role'],
         components: {
             AdminLayout,
             BlueButton,
@@ -48,13 +49,13 @@
         data() {
             return {
                 form: this.$inertia.form({
-                    name: this.name
+                    name: this.role.name
                 })
             }
         },
         methods: {
             submit() {
-                this.form.post(this.route('admin.roles.store'))
+                this.form.patch(this.route('admin.roles.update', this.role.id), this.form)
             }
         }
     }
