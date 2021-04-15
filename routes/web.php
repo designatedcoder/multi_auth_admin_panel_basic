@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admins\AdminController;
 use App\Http\Controllers\Admins\AdminDashboardController;
 use App\Http\Controllers\Admins\RoleController;
 use Illuminate\Foundation\Application;
@@ -33,12 +34,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::prefix('admin')->middleware(['auth:sanctum', 'verified'])->name('admin.')->group(function() {
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    Route::prefix('roles')->name('roles.')->group(function() {
-        Route::get('/', [RoleController::class, 'index'])->name('index');
-        Route::post('/', [RoleController::class, 'store'])->name('store');
-        Route::get('/create', [RoleController::class, 'create'])->name('create');
-        Route::get('/{role}', [RoleController::class, 'show'])->name('show');
-        Route::patch('/{role}', [RoleController::class, 'update'])->name('update');
-        Route::delete('/{role}', [RoleController::class, 'destroy'])->name('destroy');
+    Route::resource('roles', RoleController::class)->except('edit');
+
+    Route::prefix('admins')->name('admins.')->group(function() {
+        Route::get('/', [AdminController::class, 'index'])->name('index');
     });
+
 });
