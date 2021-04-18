@@ -25,11 +25,11 @@
                 <tbody>
                     <tr v-for="(admin,index) in admins" :key="index" class="text-center hover:bg-gray-600 hover:text-gray-50" :class="{'bg-gray-300': index%2 === 0}">
                         <td class="text-left capitalize py-3 pl-3">{{ admin.roles[0].name }}</td>
-                        <td class="text-left capitalize py-3 pl-3">{{ admin.name }}</td>
-                        <td class="text-left py-3 pl-3">{{ admin.created_at }}</td>
+                        <td class="text-left capitalize py-3">{{ admin.name }}</td>
+                        <td class="text-left py-3">{{ admin.created_at }}</td>
                         <td class="py-3">
                             <div class="flex justify-end pr-3">
-                                <green-button href="#" class="text-sm">Edit</green-button>
+                                <green-button :href="(route('admin.admins.show', admin.id))" class="text-sm">Edit</green-button>
                             </div>
                         </td>
                     </tr>
