@@ -35,9 +35,6 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'verified'])->name('admin.')
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('roles', RoleController::class)->except('edit');
-
-    Route::prefix('admins')->name('admins.')->group(function() {
-        Route::get('/', [AdminController::class, 'index'])->name('index');
-    });
+    Route::resource('admins', AdminController::class)->parameters(['admins' => 'user'])->only('index', 'show', 'update');
 
 });
