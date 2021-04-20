@@ -30,7 +30,7 @@
                     <div class="flex flex-col mt-2">
                         <div class="inline-block relative">
                             <jet-label for="role" value="Role" class="text-xl"></jet-label>
-                            <select class="lock capitalize border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 w-full" v-model="form.roles[0][0].name" tabindex="1">
+                            <select class="block capitalize border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 w-full" v-model="form.roles[0][0].name" tabindex="1">
                                 <option v-for="(option, index) in allRoles" :key="index" :value="option.name" :selected="option.name === form.roles[0][0].name">
                                     {{ option.name }}
                                 </option>
