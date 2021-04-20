@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admins\AdminController;
 use App\Http\Controllers\Admins\AdminDashboardController;
 use App\Http\Controllers\Admins\RoleController;
+use App\Http\Controllers\Admins\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,7 +35,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::prefix('admin')->middleware(['auth:sanctum', 'verified'])->name('admin.')->group(function() {
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('roles', RoleController::class)->except('edit');
-    Route::resource('admins', AdminController::class)->parameters(['admins' => 'user'])->only('index', 'show', 'update');
-
+    Route::resource('roles', RoleController::class)->except(['edit']);
+    Route::resource('admins', AdminController::class)->parameters(['admins' => 'user'])->only(['index', 'show', 'update']);
+    Route::resource('users', UserController::class)->only(['index', 'show', 'update']);
 });
