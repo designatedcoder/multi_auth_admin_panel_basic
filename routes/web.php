@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admins\AdminController;
-use App\Http\Controllers\Admins\AdminDashboardController;
+use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
 use App\Http\Controllers\Admins\RoleController;
 use App\Http\Controllers\Admins\UserController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use App\Http\Controllers\Admins\AdminController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Admins\AdminDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,4 +39,13 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'verified'])->name('admin.')
     Route::resource('roles', RoleController::class)->except(['edit']);
     Route::resource('admins', AdminController::class)->parameters(['admins' => 'user'])->only(['index', 'show', 'update']);
     Route::resource('users', UserController::class)->only(['index', 'show', 'update']);
+});
+
+Route::group(['middleware' => config('fortify.middleware', ['web'])], function () {
+    $limiter = config('fortify.limiters.login');
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+        ->middleware(array_filter([
+            'guest',
+            $limiter ? 'throttle:'.$limiter : null,
+        ]));
 });
