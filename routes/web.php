@@ -33,7 +33,7 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('dashboard');
 
-Route::prefix('admin')->middleware(['auth:sanctum', 'verified'])->name('admin.')->group(function() {
+Route::prefix('admin')->middleware(['auth:sanctum', 'verified', 'can:accessAdmins'])->name('admin.')->group(function() {
     Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('roles', RoleController::class)->except(['edit']);
