@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
 use App\Models\Role;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
@@ -15,9 +16,12 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        return Inertia::render('Admin/Roles/Index', [
-            'roles' => Role::all()
-        ]);
+        if (Gate::allows('accessRoles')) {
+            return Inertia::render('Admin/Roles/Index', [
+                'roles' => Role::all()
+            ]);
+        }
+        return back();
     }
 
     /**
@@ -26,7 +30,10 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return Inertia::render('Admin/Roles/Create');
+        if (Gate::allows('manageRoles')) {
+            return Inertia::render('Admin/Roles/Create');
+        }
+        return back();
     }
 
     /**
@@ -36,11 +43,14 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        $request->validate([
-            'name' => 'required',
-        ]);
-        Role::create($request->only(['name']));
-        return redirect(route('admin.roles.index'))->withSuccess('Role created successfully!');
+        if (Gate::allows('manageRoles')) {
+            $request->validate([
+                'name' => 'required',
+            ]);
+            Role::create($request->only(['name']));
+            return redirect(route('admin.roles.index'))->withSuccess('Role created successfully!');
+        }
+        return back();
     }
 
     /**
@@ -50,9 +60,12 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(Role $role) {
-        return Inertia::render('Admin/Roles/Show', [
-            'role' => $role,
-        ]);
+        if (Gate::allows('accessRoles')) {
+            return Inertia::render('Admin/Roles/Show', [
+                'role' => $role,
+            ]);
+        }
+        return back();
     }
 
     /**
@@ -74,11 +87,14 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Role $role) {
-        $request->validate([
-            'name' => 'required',
-        ]);
-        $role->update($request->only(['name']));
-        return redirect(route('admin.roles.index'))->withSuccess('Role updated successfully!');
+        if (Gate::allows('manageRoles')) {
+            $request->validate([
+                'name' => 'required',
+            ]);
+            $role->update($request->only(['name']));
+            return redirect(route('admin.roles.index'))->withSuccess('Role updated successfully!');
+        }
+        return back();
     }
 
     /**
@@ -88,7 +104,10 @@ class RoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy(Role $role) {
-        $role->delete();
-        return redirect(route('admin.roles.index'))->withSuccess('Role deleted successfully!');
+        if (Gate::allows('manageRoles')) {
+            $role->delete();
+            return redirect(route('admin.roles.index'))->withSuccess('Role deleted successfully!');
+        }
+        return back();
     }
 }

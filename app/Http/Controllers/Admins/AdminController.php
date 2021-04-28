@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admins;
 
-use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class AdminController extends Controller
 {
@@ -50,10 +51,13 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show(User $user) {
-        return Inertia::render('Admin/Admins/Show', [
-            'admin' => $user,
-            'allRoles' => Role::all(),
-        ]);
+        if (Gate::allows('manageAdmins')) {
+            return Inertia::render('Admin/Admins/Show', [
+                'admin' => $user,
+                'allRoles' => Role::all(),
+            ]);
+        }
+        return back();
     }
 
     /**
@@ -75,15 +79,18 @@ class AdminController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, User $user) {
-        $role = Role::where('name', $request->roles[0][0]['name'])->first();
-        if ($role->name != 'user' && $user->is_admin=1) {
-            $user->roles()->sync($role);
+        if (Gate::allows('manageAdmins')) {
+            $role = Role::where('name', $request->roles[0][0]['name'])->first();
+            if ($role->name != 'user' && $user->is_admin=1) {
+                $user->roles()->sync($role);
+            }
+            elseif($role->name = 'user' && $user->is_admin=1) {
+                $user->roles()->sync($role);
+                $user->update(['is_admin' => 0]);
+            }
+            return redirect()->route('admin.admins.index')->withSuccess(ucwords($user->name).' has been successfully updated!');
         }
-        elseif($role->name = 'user' && $user->is_admin=1) {
-            $user->roles()->sync($role);
-            $user->update(['is_admin' => 0]);
-        }
-        return redirect()->route('admin.admins.index')->withSuccess(ucwords($user->name).' has been successfully updated!');
+        return back();
     }
 
     /**
