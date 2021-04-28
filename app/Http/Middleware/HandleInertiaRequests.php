@@ -37,6 +37,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request) {
         return array_merge(parent::share($request), [
+            'auth' => function() {
+                $user = auth()->user();
+                return $user ? [
+                    'can' => [
+                        'manageAdmins' => $user->can('manageAdmins'),
+                        'accessRoles' => $user->can('accessRoles'),
+                        'manageRoles' => $user->can('manageRoles'),
+                        'accessUsers' => $user->can('accessUsers'),
+                        'manageUsers' => $user->can('manageUsers'),
+                    ],
+                ] : null;
+            },
             'success' => function() {
                 return Session::get('success')
                 ? Session::get('success')
