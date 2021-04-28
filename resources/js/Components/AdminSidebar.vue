@@ -12,8 +12,8 @@
             </button>
             <div class="flex flex-col" v-if="openAdmins">
                 <inertia-link :href="route('admin.admins.index')" class="text-right capitalize border-t w-full px-6 py-2" :class="route().current('admin.admins.*') ? 'text-gray-50 bg-gray-500' : 'hover:text-gray-50 hover:bg-gray-500'">Admins</inertia-link>
-                <inertia-link :href="route('admin.roles.index')" class="text-right capitalize border-t w-full px-6 py-2" :class="route().current('admin.roles.*') ? 'text-gray-50 bg-gray-500' : 'hover:text-gray-50 hover:bg-gray-500'">Roles</inertia-link>
-                <inertia-link :href="route('admin.users.index')" class="text-right capitalize border-t w-full px-6 py-2" :class="route().current('admin.users.*') ? 'text-gray-50 bg-gray-500' : 'hover:text-gray-50 hover:bg-gray-500'">Users</inertia-link>
+                <inertia-link :href="route('admin.roles.index')" class="text-right capitalize border-t w-full px-6 py-2" :class="route().current('admin.roles.*') ? 'text-gray-50 bg-gray-500' : 'hover:text-gray-50 hover:bg-gray-500'" v-if="$page.props.auth.can.accessRoles">Roles</inertia-link>
+                <inertia-link :href="route('admin.users.index')" class="text-right capitalize border-t w-full px-6 py-2" :class="route().current('admin.users.*') ? 'text-gray-50 bg-gray-500' : 'hover:text-gray-50 hover:bg-gray-500'" v-if="$page.props.auth.can.accessUsers">Users</inertia-link>
             </div>
             <inertia-link :href="route('dashboard')" class="flex justify-between items-center border-t px-6 py-2 capitalize hover:bg-gray-500 hover:text-gray-50">
                 Dashboard

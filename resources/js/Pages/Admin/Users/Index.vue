@@ -19,7 +19,7 @@
                         <th class="text-left pl-3">Name</th>
                         <th class="text-left">E-mail</th>
                         <th class="text-left">Created</th>
-                        <th class="text-right pr-3">Actions</th>
+                        <th class="text-right pr-3" v-if="$page.props.auth.can.manageUsers">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,7 +27,7 @@
                         <td class="text-left capitalize py-3 pl-3">{{ user.name }}</td>
                         <td class="text-left capitalize py-3">{{ user.email }}</td>
                         <td class="text-left py-3">{{ user.created_at }}</td>
-                        <td class="py-3">
+                        <td class="py-3" v-if="$page.props.auth.can.manageUsers">
                             <div class="flex justify-end pr-3">
                                 <green-button :href="route('admin.users.show', user.id)" class="text-sm">Edit</green-button>
                             </div>
